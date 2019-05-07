@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.jbhunt.personnel</groupId>
+	<artifactId>ws_personnel_team</artifactId>
+	<version>0.0.46-SNAPSHOT</version>
+	<packaging>war</packaging>
+
+	<name>ws_personnel_team</name>
+	<description>Personnel Team Web Service</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.4.RELEASE</version> <!-- for rest document added -->
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<lombok.version>1.16.8</lombok.version>
+		<derby.version>10.12.1.1</derby.version>
+		<sqljdbc.version>6.0</sqljdbc.version>
+		<hibernate.version>5.1.0.Final</hibernate.version>
+		<activemq-version>5.13.2</activemq-version>
+		<camel.spring.boot.version>2.17.0</camel.spring.boot.version>
+		<org.mapstruct.version>1.0.0.Final</org.mapstruct.version>
+		<snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
+		<!-- rest doc api doc link -->
+		<restDocDirectory>docs</restDocDirectory>
+		<restDocName>index</restDocName>
+		<restDocExtension>.html</restDocExtension>
+
+		<!-- JBH Logging -->
+		<logback.version>1.1.11</logback.version>
+		<logstash-logback-encoder.version>4.8</logstash-logback-encoder.version>
+		<janino.version>3.0.6</janino.version>
+	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Dalston.RELEASE</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<dependencies>
+		<!-- Eureka Registration -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-eureka</artifactId>
+		</dependency>
+		<!-- Eureka Registration -->
+		<!-- ESA -->
+		<dependency>
+			<groupId>com.jbhunt</groupId>
+			<artifactId>lib_security_autoconfigure</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+		<!-- ESA -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-sleuth</artifactId>
+		</dependency>
+		<!-- camel dependencies began -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-test</artifactId>
+			<version>${camel.spring.boot.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-spring-boot</artifactId>
+			<version>${camel.spring.boot.version}</version>
+		</dependency>
+		<!-- ActiveMQ -->
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-camel</artifactId>
+		</dependency>
+		<!-- jackson -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jackson</artifactId>
+			<version>2.16.1</version>
+		</dependency>
+		<!-- camel dependencies end -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.microsoft.sqlserver.jdbc</groupId>
+			<artifactId>sqljdbc4.2</artifactId>
+			<version>${sqljdbc.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-java8</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-jdk8</artifactId>
+			<version>${org.mapstruct.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.jbhunt.personnel</groupId>
+			<artifactId>lib_personnel_team_dto</artifactId>
+			<version>0.0.14</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-junit</artifactId>
+			<version>2.0.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jbhunt</groupId>
+			<artifactId>lib_security_autoconfigure</artifactId>
+			<version>1.0.19</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.jbhunt</groupId>
+			<artifactId>lib_SecurePIDReader</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-ldap</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.jbhunt.personnel</groupId>
+			<artifactId>lib_personnel_schedule_entity</artifactId>
+			<version>0.0.7</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jbhunt.infrastructure</groupId>
+			<artifactId>lib_infrastructure_taskassignment_entity</artifactId>
+			<version>0.0.9</version>
+		</dependency>
+
+		<!-- EOI dependencies -->
+		<dependency>
+			<groupId>com.jbhunt.hrms</groupId>
+			<artifactId>lib_hrms_EOIAPICommons</artifactId>
+			<version>2.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jbhunt.hrms</groupId>
+			<artifactId>lib_hrms_EOIAPIUtil</artifactId>
+			<version>2.0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.jbhunt</groupId>
+			<artifactId>lib_infrastructure_exception</artifactId>
+			<version>2.0.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.jbhunt</groupId>
+					<artifactId>lib_infrastructure_exception_dto</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- JBHunt Dependencies List Starting -->
+		<!-- Config -->
+		<dependency>
+			<groupId>com.jbhunt.platform.javaFunctions</groupId>
+			<artifactId>javaFunctionsConfigCloud</artifactId>
+			<version>7.0.4</version>
+		</dependency>
+
+		<!-- DB connection pooling -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.ant</groupId>
+			<artifactId>ant-junit</artifactId>
+			<version>1.9.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+			<version>1.9.9</version>
+		</dependency>
+
+		<!-- Derby Start -->
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derbytools</artifactId>
+			<version>${derby.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.restdocs</groupId>
+			<artifactId>spring-restdocs-mockmvc</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Derby End -->
+		<dependency>
+			<groupId>com.jbhunt</groupId>
+			<artifactId>lib_infrastructure_exception_dto</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
+
+		<!-- Jasper Dependencies List Start -->
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>6.1.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.lucene</groupId>
+					<artifactId>lucene-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.lucene</groupId>
+					<artifactId>lucene-analyzers-common</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.lucene</groupId>
+					<artifactId>lucene-queryparser</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- Jasper Dependencies List End -->
+		<!-- JEST Dependencies List Start -->
+		<dependency>
+			<groupId>io.searchbox</groupId>
+			<artifactId>jest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.elasticsearch</groupId>
+			<artifactId>elasticsearch</artifactId>
+			<version>5.5.2</version>
+		</dependency>
+		<!-- JEST Dependencies List End -->
+		<!-- GZip -->
+		<dependency>
+			<groupId>com.github.ziplet</groupId>
+			<artifactId>ziplet</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+			</testResource>
+		</testResources>
+		<finalName>personnelteamservices</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.2</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<forkMode>always</forkMode>
+					<skip>false</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.bsc.maven</groupId>
+				<artifactId>maven-processor-plugin</artifactId>
+				<version>3.3.1</version>
+				<configuration>
+					<defaultOutputDirectory>
+						${project.build.directory}/generated-sources
+					</defaultOutputDirectory>
+					<processors>
+						<processor>org.mapstruct.ap.MappingProcessor</processor>
+					</processors>
+					<sourceDirectory>src/main/java/com/jbhunt/personnel/team/</sourceDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<id>process</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>process</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.mapstruct</groupId>
+						<artifactId>mapstruct-processor</artifactId>
+						<version>${org.mapstruct.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+			<!-- rest doc api plugin -->
+			<plugin>
+				<groupId>org.asciidoctor</groupId>
+				<artifactId>asciidoctor-maven-plugin</artifactId>
+				<version>1.5.2</version>
+				<executions>
+					<execution>
+						<id>generate-docs</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<backend>html</backend>
+							<doctype>book</doctype>
+							<sourceDocumentName>${restDocName}.adoc</sourceDocumentName>
+							<attributes>
+								<toc>left</toc>
+								<snippets>${snippetsDirectory}</snippets>
+							</attributes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.outputDirectory}/static/${restDocDirectory}</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.build.directory}/generated-docs</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- rest doc api plugin -->
+		</plugins>
+	</build>
+</project>
